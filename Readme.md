@@ -1,2 +1,2 @@
 # Workbench
-More information soon
+More informations soon

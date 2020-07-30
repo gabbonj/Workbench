@@ -1,7 +1,6 @@
 from src import *
 
-if __name__ == "__main__":
-
+def engineProcess():
     context = Context(1280, 720)
     context.initGrid(1000)
 
@@ -14,3 +13,9 @@ if __name__ == "__main__":
 
     while True:
         context.update()
+    
+
+if __name__ == "__main__":
+    engine_thread = t.Thread(name='engine', target=engineProcess, daemon=True)
+    engine_thread.start()
+    engine_thread.join()
