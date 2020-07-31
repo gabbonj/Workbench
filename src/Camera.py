@@ -23,7 +23,7 @@ class Camera:
 
 
     def setCameraPosition(self, position):
-        self.position = position
+        self.position = np.array(position, dtype='float32')
         self.updateCamera(self.forward, self.position)
 
     

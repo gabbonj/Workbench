@@ -144,7 +144,6 @@ class Context:
 
 
     def update(self):
-
         t = time.time()
         # Opengl update
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
@@ -195,7 +194,6 @@ class Context:
 
         self.camera.setCameraPosition(newpos)
         
-        #print(dt)
         pygame.display.flip()
         pygame.time.wait(10)
-        
+            

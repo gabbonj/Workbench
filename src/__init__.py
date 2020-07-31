@@ -1,4 +1,5 @@
 import os
+import time
 import pygame
 import numpy as np
 import threading as t
