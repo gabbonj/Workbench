@@ -33,3 +33,6 @@ def get_traslation(x, y, z):
                     [ 0,  0,  1, z],
                     [ 0,  0,  0, 1]], dtype='float32')
     return out
+
+def deg_to_rad(deg):
+    return (deg * np.pi)/180
