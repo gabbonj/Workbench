@@ -17,9 +17,14 @@ def startEngine(lock):
         lock.release()
 
 if __name__ == "__main__":
+    
     engine_update_lock = t.Lock()
     engine_thread = t.Thread(name='engine', target=startEngine, args=(engine_update_lock, ),daemon=True)
     engine_thread.start()
     time.sleep(1)
-    #context.camera.setCameraPosition([10, 10, 10])
+    
+    root = tk.Tk()
+    gui = Interface(context, master=root)
+    gui.mainloop()
+
     engine_thread.join()

@@ -14,7 +14,8 @@ from OpenGL.GL import *
 
 class Context:
 
-    def __init__(self, height, width, eyeposition=[1.0, 1.0, 1.0], objects=[]):
+    def __init__(self, height, width, eyeposition=[1.0, 1.0, 1.0], objects=[], first_person=True):
+        self.first_person = first_person
         self.display = (height, width)
         self.centre = (self.display[0]/2, self.display[1]/2)
         for obj in objects:
@@ -24,7 +25,7 @@ class Context:
         pygame.init()
         pygame.display.set_mode(self.display, DOUBLEBUF|OPENGL)
         pygame.mouse.set_pos(self.centre)
-        pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(not self.first_person)
 
         # OpenglProcess
         glEnable(GL_DEPTH_TEST)
@@ -162,7 +163,11 @@ class Context:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            if event.type == pygame.MOUSEMOTION:
+            if event.type == pygame.KEYUP:
+                if event.key==K_LESS:
+                    self.first_person = not self.first_person
+                    pygame.mouse.set_visible(not self.first_person)
+            if event.type == pygame.MOUSEMOTION and self.first_person:
                 mouse_position = pygame.mouse.get_pos()
                 dx, dy = (0, 0)
                 dx = mouse_position[0] - self.centre[0]
@@ -176,18 +181,19 @@ class Context:
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w]:
-            newpos += self.camera.speed * self.camera.forward
-        if keys[pygame.K_s]:
-            newpos -= self.camera.speed * self.camera.forward
-        if keys[pygame.K_a]:
-            newpos -= normalize(np.cross(self.camera.forward, self.camera.up)) * self.camera.speed
-        if keys[pygame.K_d]:
-            newpos += normalize(np.cross(self.camera.forward, self.camera.up)) * self.camera.speed
-        if keys[pygame.K_LSHIFT]:
-            newpos[1] += self.camera.speed
-        if keys[pygame.K_LCTRL]:
-            newpos[1] -= self.camera.speed
+        if self.first_person:
+            if keys[pygame.K_w]:
+                newpos += self.camera.speed * self.camera.forward
+            if keys[pygame.K_s]:
+                newpos -= self.camera.speed * self.camera.forward
+            if keys[pygame.K_a]:
+                newpos -= normalize(np.cross(self.camera.forward, self.camera.up)) * self.camera.speed
+            if keys[pygame.K_d]:
+                newpos += normalize(np.cross(self.camera.forward, self.camera.up)) * self.camera.speed
+            if keys[pygame.K_LSHIFT]:
+                newpos[1] += self.camera.speed
+            if keys[pygame.K_LCTRL]:
+                newpos[1] -= self.camera.speed
         if keys[pygame.K_ESCAPE]:
             pygame.quit()
             quit()
