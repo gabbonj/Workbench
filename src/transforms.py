@@ -36,3 +36,6 @@ def get_traslation(x, y, z):
 
 def deg_to_rad(deg):
     return (deg * np.pi)/180
+
+def rad_to_deg(rad):
+    return (rad * 180) / np.pi
