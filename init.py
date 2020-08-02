@@ -16,6 +16,15 @@ def startEngine(lock):
         context.update()
         lock.release()
 
+def startGui():
+    app = QtWidgets.QApplication(sys.argv)
+    Worckbanch = QtWidgets.QMainWindow()
+    ui = Ui_Worckbanch()
+    ui.setupUi(Worckbanch)
+    ui.connectUI(context)
+    Worckbanch.show()
+    sys.exit(app.exec_())
+
 if __name__ == "__main__":
     
     engine_update_lock = t.Lock()
@@ -23,8 +32,4 @@ if __name__ == "__main__":
     engine_thread.start()
     time.sleep(1)
     
-    root = tk.Tk()
-    gui = Interface(context, master=root)
-    gui.mainloop()
-
-    engine_thread.join()
+    startGui()
