@@ -15,7 +15,6 @@ from .Object import Object
 from .Camera import Camera
 from .Shader import Shader
 from .Context import Context
-from .Interface import Interface
 
 from OpenGL.GL import *
 from PyQt5 import QtCore, QtGui, QtWidgets

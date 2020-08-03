@@ -1,6 +1,6 @@
 from src import *
 
-def startEngine(lock):
+def startEngine():
     global context
     context = Context(1280, 720)
     context.initGrid(1000)
@@ -12,9 +12,7 @@ def startEngine(lock):
     papthy = Path(pp, rr)
     context.addObject(papthy)
     while True:
-        lock.acquire()
         context.update()
-        lock.release()
 
 def startGui():
     app = QtWidgets.QApplication(sys.argv)
@@ -26,9 +24,7 @@ def startGui():
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    
-    engine_update_lock = t.Lock()
-    engine_thread = t.Thread(name='engine', target=startEngine, args=(engine_update_lock, ),daemon=True)
+    engine_thread = t.Thread(name='engine', target=startEngine, daemon=True)
     engine_thread.start()
     time.sleep(1)
     
