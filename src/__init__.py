@@ -8,7 +8,7 @@ from pygame.locals import *
 from ctypes import c_void_p
 
 
-from .Gui import Ui_Worckbanch
+from .GUI.Gui import Ui_Worckbanch
 from .Path import Path
 from .transforms import *
 from .Object import Object

@@ -1,7 +1,7 @@
 import sys
 import numpy as np
-from .transforms import *
-from .Context import Context
+from ..transforms import *
+from ..Context import Context
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 d_sens_step = 1
@@ -198,13 +198,19 @@ class Ui_Worckbanch(object):
         self.r_rotate.setGeometry(QtCore.QRect(120, 90, 61, 23))
         self.r_rotate.setObjectName("r_rotate")
         Worckbanch.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(Worckbanch)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 758, 21))
-        self.menubar.setObjectName("menubar")
-        Worckbanch.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Worckbanch)
         self.statusbar.setObjectName("statusbar")
         Worckbanch.setStatusBar(self.statusbar)
+        self.menubar = QtWidgets.QMenuBar(Worckbanch)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 758, 21))
+        self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
+        Worckbanch.setMenuBar(self.menubar)
+        self.actionExit = QtWidgets.QAction(Worckbanch)
+        self.actionExit.setObjectName("actionExit")
+        self.menuFile.addAction(self.actionExit)
+        self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(Worckbanch)
         QtCore.QMetaObject.connectSlotsByName(Worckbanch)
@@ -244,6 +250,10 @@ class Ui_Worckbanch(object):
         self.r_update.setText(_translate("Worckbanch", "UPDATE"))
         self.r_reset.setText(_translate("Worckbanch", "RESET"))
         self.r_rotate.setText(_translate("Worckbanch", "ROTATE"))
+        self.menuFile.setTitle(_translate("Worckbanch", "File"))
+        self.actionExit.setText(_translate("Worckbanch", "Exit"))
+        self.actionExit.setShortcut(_translate("Worckbanch", "Ctrl+X"))
+
 
     def connectUI(self,  ctx):
         # connecting the context
@@ -273,6 +283,8 @@ class Ui_Worckbanch(object):
         self.r_update.clicked.connect(self.updateAngles)
         self.r_reset.clicked.connect(self.resetAngles)
         self.r_rotate.clicked.connect(self.rotateByAngles)
+
+        self.actionExit.triggered.connect(sys.exit)
 
     # Movement
     def moveUp(self):
@@ -317,31 +329,33 @@ class Ui_Worckbanch(object):
         self.context.camera.roateCamera(self.context.camera.pitch, newyaw)
     
     # Translate data
-    def updateCoordinates(self, useless):
+    def updateCoordinates(self):
         current_position = self.context.camera.position
         self.x_coord.setText(str(current_position[0]))
         self.y_coord.setText(str(current_position[1]))
         self.z_coord.setText(str(current_position[2]))
 
-    def resetCoordinates(self, useless):
+    def resetCoordinates(self):
         self.x_coord.setText('0')
         self.y_coord.setText('0')
         self.z_coord.setText('0')
 
-    def moveToCoordinates(self, useless):
+    def moveToCoordinates(self):
         newpos = [float(self.x_coord.text()), float(self.y_coord.text()), float(self.z_coord.text())]
         self.context.camera.setCameraPosition(newpos)
 
     # Rotation data
-    def updateAngles(self, useless):
+    def updateAngles(self):
         self.p_angle.setText(str(int(rad_to_deg(self.context.camera.pitch))))
         self.y_angle.setText(str(int(rad_to_deg(self.context.camera.yaw))))
 
-    def resetAngles(self, useless):
+    def resetAngles(self):
         self.p_angle.setText('0')
         self.y_angle.setText('0')
 
-    def rotateByAngles(self, useless):
+    def rotateByAngles(self):
         newpitch = deg_to_rad(float(self.p_angle.text()))
         newyaw = deg_to_rad(float(self.y_angle.text()))
         self.context.camera.roateCamera(newpitch, newyaw)
+
+    
