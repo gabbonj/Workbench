@@ -9,19 +9,20 @@ from OpenGL.GL import *
 class Path:
 
     # position=[x1, y1, z1, ..., xn, yn, zn] ; rotation = [[Rx1, Ry1, Rz1], ..., [Rxn, Ryn, Rzn]] 
-    def __init__(self, position, rotation):
-        assert len(position) == len(rotation) * 3
-        self.rotation = rotation
+    def __init__(self, position, rotation=None):
+        self.loadPath(position)
+        
+        if rotation:
+            assert len(position) == len(rotation) * 3
+            self.loadRotation(rotation)
+        else:
+            self.rotation = 'Pio è un figo'
+        
 
-        # compiling the shaders
+    def loadPath(self, position):
+        # compiling shader
         self.path_shader = Shader('src\\shaders\\path\\pathvert.glsl',
                                   'src\\shaders\\path\\pathfrag.glsl').shaderProgram
-        self.xpath_shader = Shader('src\\shaders\\path\\pathvert.glsl',
-                                   'src\\shaders\\path\\xpathfrag.glsl').shaderProgram
-        self.ypath_shader = Shader('src\\shaders\\path\\pathvert.glsl',
-                                   'src\\shaders\\path\\ypathfrag.glsl').shaderProgram
-        self.zpath_shader = Shader('src\\shaders\\path\\pathvert.glsl',
-                                   'src\\shaders\\path\\zpathfrag.glsl').shaderProgram
 
         # setting path buffer
         self.vertices = position
@@ -31,6 +32,17 @@ class Path:
         glBindBuffer(GL_ARRAY_BUFFER, self.lineBuffer)
         glBufferData(GL_ARRAY_BUFFER, np.array(self.vertices, dtype='float32'), GL_STATIC_DRAW)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * 4, c_void_p(0))
+
+    def loadRotation(self, rotation):
+        self.rotation = rotation
+
+        # compiling shader
+        self.xpath_shader = Shader('src\\shaders\\path\\pathvert.glsl',
+                                   'src\\shaders\\path\\xpathfrag.glsl').shaderProgram
+        self.ypath_shader = Shader('src\\shaders\\path\\pathvert.glsl',
+                                   'src\\shaders\\path\\ypathfrag.glsl').shaderProgram
+        self.zpath_shader = Shader('src\\shaders\\path\\pathvert.glsl',
+                                   'src\\shaders\\path\\zpathfrag.glsl').shaderProgram
 
         # setting versors
         self.xvertices = []
@@ -73,14 +85,12 @@ class Path:
         glBufferData(GL_ARRAY_BUFFER, np.array(self.zvertices, dtype='float32'), GL_STATIC_DRAW)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * 4, c_void_p(0))
 
-
     def getVersorAtTime(self, versor, index):
         r_versor = np.dot(get_rot(self.rotation[index][0], 0), versor)
         r_versor = np.dot(get_rot(self.rotation[index][1], 1), r_versor)
         r_versor = np.dot(get_rot(self.rotation[index][2], 2), r_versor)
         t_versor = np.dot(get_traslation(self.vertices[index*3], self.vertices[index*3 + 1], self.vertices[index*3 + 2]), r_versor)
         return t_versor
-
 
     def renderPath(self, camera):
         model = np.identity(4)
@@ -101,41 +111,42 @@ class Path:
         glDisableVertexAttribArray(0)
 
         # rendering the xlines
-        glBindVertexArray(self.xpatharray)
-        glUseProgram(self.xpath_shader)
-        modelLocation = glGetUniformLocation(self.xpath_shader, 'model')
-        viewLocation = glGetUniformLocation(self.xpath_shader, 'view')
-        projectionLocation = glGetUniformLocation(self.xpath_shader, 'projection')
-        glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
-        glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
-        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
-        glEnableVertexAttribArray(0)
-        glDrawArrays(GL_LINES, 0, int(len(self.xvertices)/3))
-        glDisableVertexAttribArray(0)
+        if self.rotation != 'Pio è un figo':
+            glBindVertexArray(self.xpatharray)
+            glUseProgram(self.xpath_shader)
+            modelLocation = glGetUniformLocation(self.xpath_shader, 'model')
+            viewLocation = glGetUniformLocation(self.xpath_shader, 'view')
+            projectionLocation = glGetUniformLocation(self.xpath_shader, 'projection')
+            glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
+            glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
+            glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
+            glEnableVertexAttribArray(0)
+            glDrawArrays(GL_LINES, 0, int(len(self.xvertices)/3))
+            glDisableVertexAttribArray(0)
 
-        # rendering the ylines
-        glBindVertexArray(self.ypatharray)
-        glUseProgram(self.ypath_shader)
-        modelLocation = glGetUniformLocation(self.ypath_shader, 'model')
-        viewLocation = glGetUniformLocation(self.ypath_shader, 'view')
-        projectionLocation = glGetUniformLocation(self.ypath_shader, 'projection')
-        glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
-        glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
-        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
-        glEnableVertexAttribArray(0)
-        glDrawArrays(GL_LINES, 0, int(len(self.xvertices)/3))
-        glDisableVertexAttribArray(0)
+            # rendering the ylines
+            glBindVertexArray(self.ypatharray)
+            glUseProgram(self.ypath_shader)
+            modelLocation = glGetUniformLocation(self.ypath_shader, 'model')
+            viewLocation = glGetUniformLocation(self.ypath_shader, 'view')
+            projectionLocation = glGetUniformLocation(self.ypath_shader, 'projection')
+            glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
+            glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
+            glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
+            glEnableVertexAttribArray(0)
+            glDrawArrays(GL_LINES, 0, int(len(self.xvertices)/3))
+            glDisableVertexAttribArray(0)
 
-        # rendering the zlines
-        glBindVertexArray(self.zpatharray)
-        glUseProgram(self.zpath_shader)
-        modelLocation = glGetUniformLocation(self.zpath_shader, 'model')
-        viewLocation = glGetUniformLocation(self.zpath_shader, 'view')
-        projectionLocation = glGetUniformLocation(self.zpath_shader, 'projection')
-        glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
-        glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
-        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
-        glEnableVertexAttribArray(0)
-        glDrawArrays(GL_LINES, 0, int(len(self.xvertices)/3))
-        glDisableVertexAttribArray(0)
+            # rendering the zlines
+            glBindVertexArray(self.zpatharray)
+            glUseProgram(self.zpath_shader)
+            modelLocation = glGetUniformLocation(self.zpath_shader, 'model')
+            viewLocation = glGetUniformLocation(self.zpath_shader, 'view')
+            projectionLocation = glGetUniformLocation(self.zpath_shader, 'projection')
+            glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
+            glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
+            glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
+            glEnableVertexAttribArray(0)
+            glDrawArrays(GL_LINES, 0, int(len(self.xvertices)/3))
+            glDisableVertexAttribArray(0)
         

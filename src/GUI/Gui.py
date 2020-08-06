@@ -8,7 +8,6 @@ d_sens_step = 1
 d_sens_rot = 20
 
 class Ui_Worckbanch(object):
-
     def setupUi(self, Worckbanch):
         Worckbanch.setObjectName("Worckbanch")
         Worckbanch.resize(758, 227)
@@ -206,11 +205,21 @@ class Ui_Worckbanch(object):
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuInfo = QtWidgets.QMenu(self.menubar)
+        self.menuInfo.setObjectName("menuInfo")
         Worckbanch.setMenuBar(self.menubar)
         self.actionExit = QtWidgets.QAction(Worckbanch)
         self.actionExit.setObjectName("actionExit")
+        self.actionCommands = QtWidgets.QAction(Worckbanch)
+        self.actionCommands.setCheckable(False)
+        self.actionCommands.setObjectName("actionCommands")
+        self.actionGitHub_Repo = QtWidgets.QAction(Worckbanch)
+        self.actionGitHub_Repo.setObjectName("actionGitHub_Repo")
         self.menuFile.addAction(self.actionExit)
+        self.menuInfo.addAction(self.actionCommands)
+        self.menuInfo.addAction(self.actionGitHub_Repo)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuInfo.menuAction())
 
         self.retranslateUi(Worckbanch)
         QtCore.QMetaObject.connectSlotsByName(Worckbanch)
@@ -251,9 +260,11 @@ class Ui_Worckbanch(object):
         self.r_reset.setText(_translate("Worckbanch", "RESET"))
         self.r_rotate.setText(_translate("Worckbanch", "ROTATE"))
         self.menuFile.setTitle(_translate("Worckbanch", "File"))
+        self.menuInfo.setTitle(_translate("Worckbanch", "Info"))
         self.actionExit.setText(_translate("Worckbanch", "Exit"))
         self.actionExit.setShortcut(_translate("Worckbanch", "Ctrl+X"))
-
+        self.actionCommands.setText(_translate("Worckbanch", "Commands"))
+        self.actionGitHub_Repo.setText(_translate("Worckbanch", "GitHub Repo"))
 
     def connectUI(self,  ctx):
         # connecting the context
