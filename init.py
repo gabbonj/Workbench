@@ -16,19 +16,18 @@ def startEngine():
     papthy = Path(pp, rr)
     context.addObject(papthy)
 
+    scri = Script(context)
+    scri.loadScripts(lambda x : None, srt)
+
     context.loadObjFile('models\\lucy.obj',
                         'src\shaders\default\defaultvert.glsl',
                         'src\shaders\default\defaultfrag.glsl',
                         [ [ 3, 5 * 4, c_void_p(0) ], [2, 5 * 4, c_void_p(3 * 4)] ],
                         [1, 1, 1, 0, 0, 0],
-                        texture = 'textures\\brick.jpg')
-
-    scri = Script(context, context.objects[1])
-    scri.loadScript(lambda : srt(scri))
-
+                        texture = 'textures\\brick.jpg', 
+                        scripts=[scri])
 
     while True:
-        scri.runScript()
         context.update()
 
 def startGui():

@@ -1,18 +1,22 @@
-from .Context import Context
 
 class Script:
 
-    def __init__(self, ctx, obj=None,  script=None):
-        assert isinstance(ctx, Context)
+    def __init__(self, ctx, obj=None,  start_script=None, update_script=None):
         self.context = ctx
         if obj:
             self.object = obj
-        if script:
-            assert isinstance(script, function)
-            self.runScript = script
 
-    def loadScript(self, script):
-        self.runScript = script
+        if start_script:
+            self.startScript = lambda : start_script(self)
+        else:
+            self.startScript = None
 
-    def runScript(self):
-        raise ValueError('The script is not loaded in the class')
+        if update_script:
+            self.updateScript = lambda : update_script(self)
+        else:
+            self.updateScript = None
+
+
+    def loadScripts(self, start_script, update_script):
+        self.startScript = lambda : start_script(self)
+        self.updateScript = lambda : update_script(self)

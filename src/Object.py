@@ -3,6 +3,7 @@ import numpy as np
 from ctypes import c_void_p
 
 from .Shader import Shader
+from .Script import Script
 from .transforms import *
 
 from OpenGL.GL import *
@@ -11,13 +12,14 @@ class Object:
 
     # attribs syntax : [ [size, stride, pointer_offset] ... ]
     # model data syntax: [x, y, z, rx, ry, rz]
-    def __init__(self, verteces, tris, vertex_path, frag_path, attribs, modeldata):
+    def __init__(self, verteces, tris, vertex_path, frag_path, attribs, modeldata, scripts=[]):
         # stores the informations
         self.shader = Shader(vertex_path, frag_path).shaderProgram
         self.vertices = verteces
         self.tris = tris
         self.modeldata = modeldata
         self.attribs = attribs
+        self.scripts = scripts
 
         # loads on gpu
         self.vertexArray = glGenVertexArrays(1)
@@ -33,6 +35,15 @@ class Object:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.indicesBuffer)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, np.array(tris, dtype='uint32'), GL_STATIC_DRAW)
 
+        for s in scripts:
+            assert isinstance(s, Script)
+            s.object = self
+            if s.startScript:
+                s.startScript()
+
+    def loadScript(self, script):
+        script.object = self
+        self.scripts.append(script)
 
     def loadTexture(self, texture_path):
         glBindVertexArray(self.vertexArray)
@@ -47,6 +58,11 @@ class Object:
         width = textureSurface.get_width()
         height = textureSurface.get_height()
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+
+    def scriptUpdate(self):
+        for s in self.scripts:
+            if s.updateScript:
+                s.updateScript()
 
     def renderObject(self, camera):
         glUseProgram(self.shader)

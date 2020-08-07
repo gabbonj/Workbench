@@ -52,7 +52,7 @@ class Context:
     def addObject(self, objectt):
         self.objects.append(objectt)
 
-    def loadObjFile(self, obj_path, vertex_path, frag_path, attribs, modeldata, texture=None):
+    def loadObjFile(self, obj_path, vertex_path, frag_path, attribs, modeldata, texture=None, scripts=[]):
         f = open(obj_path, 'r')
         vertices_position = []
         vertices_texture = []
@@ -85,7 +85,7 @@ class Context:
         for x in range(len(indices)):
             indices[x] = int(indices[x]) -1
         
-        imported = Object(vertices, indices, vertex_path, frag_path, attribs, modeldata)
+        imported = Object(vertices, indices, vertex_path, frag_path, attribs, modeldata, scripts)
         if texture:
             imported.loadTexture(texture)        
         self.addObject(imported)
@@ -144,6 +144,10 @@ class Context:
             elif isinstance(obj, Path):
                 obj.renderPath(self.camera)
 
+    def updateScripts(self):
+        for obj in self.objects:
+            if isinstance(obj, Object):
+                obj.scriptUpdate()
 
     def update(self):
         t = time.time()
@@ -153,6 +157,7 @@ class Context:
         if self.grid['render']:
             self.renderGrid()
         self.renderObjects()
+        self.updateScripts()
 
         self.dt = time.time() - t
         self.time += self.dt
