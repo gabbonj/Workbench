@@ -15,6 +15,7 @@ from OpenGL.GL import *
 class Context:
 
     def __init__(self, height, width, eyeposition=[1.0, 1.0, 1.0], objects=[], first_person=True):
+        self.time = 0
         self.first_person = first_person
         self.display = (height, width)
         self.centre = (self.display[0]/2, self.display[1]/2)
@@ -31,7 +32,7 @@ class Context:
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
         glCullFace(GL_FRONT)
-        glFrontFace(GL_CW);
+        glFrontFace(GL_CW)
         glPointSize(5)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
         self.grid = {
@@ -102,8 +103,6 @@ class Context:
             rightvertex = [0 - size/2, 0, x- size/2]
             lines.extend(rightvertex)
 
-
-
         self.grid['size'] = len(lines)
         lines = np.array(lines, dtype='float32')
         
@@ -146,12 +145,15 @@ class Context:
 
     def update(self):
         t = time.time()
+        
         # Opengl update
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         if self.grid['render']:
             self.renderGrid()
         self.renderObjects()
-        dt = time.time() - t
+
+        self.dt = time.time() - t
+        self.time += self.dt
 
         ## draw the scen
         # Pygame update
