@@ -68,16 +68,17 @@ class Context:
                 elif len(vs) == 4:
                     ii = [face.split('/')[0] for face in vs]
                     indices.extend([ii[0], ii[1], ii[3], ii[3], ii[1], ii[2]])
-            if line[:3] == 'vt ':
+            if line[:3] == 'vt ' and texture:
                 vertices_texture.extend(line[3:-1].split(' '))
 
         vertices = []
         for v in range(int(len(vertices_position)/3)):
             for x in range(3):
                 vertices.append(vertices_position[v*3+x])
-            try:    
-                for x in range(2):
-                    vertices.append(vertices_texture[v*2+x])
+            try:
+                if texture:
+                    for x in range(2):
+                        vertices.append(vertices_texture[v*2+x])
             except:
                 vertices.extend([0, 0])
 
@@ -85,7 +86,8 @@ class Context:
             indices[x] = int(indices[x]) -1
         
         imported = Object(vertices, indices, vertex_path, frag_path, attribs, modeldata)
-        imported.loadTexture(texture)
+        if texture:
+            imported.loadTexture(texture)        
         self.addObject(imported)
 
     def initGrid(self, size):

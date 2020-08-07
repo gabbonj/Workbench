@@ -1,5 +1,9 @@
 from src import *
 
+def srt(this):
+    assert isinstance(this, Script)
+    this.object.modeldata[4] = this.context.time % 6.28
+
 def startEngine():
     global context
     context = Context(1280, 720)
@@ -11,7 +15,20 @@ def startEngine():
         rr.append([x /10, 2 * x /10, x /10])
     papthy = Path(pp, rr)
     context.addObject(papthy)
+
+    context.loadObjFile('models\\lucy.obj',
+                        'src\shaders\default\defaultvert.glsl',
+                        'src\shaders\default\defaultfrag.glsl',
+                        [ [ 3, 5 * 4, c_void_p(0) ], [2, 5 * 4, c_void_p(3 * 4)] ],
+                        [1, 1, 1, 0, 0, 0],
+                        texture = 'textures\\brick.jpg')
+
+    scri = Script(context, context.objects[1])
+    scri.loadScript(lambda : srt(scri))
+
+
     while True:
+        scri.runScript()
         context.update()
 
 def startGui():
