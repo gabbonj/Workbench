@@ -1,4 +1,5 @@
 from src import *
+from scripts import *
 
 def srt(this):
     assert isinstance(this, Script)
@@ -9,12 +10,8 @@ def startEngine():
     context = Context(1280, 720)
     context.initGrid(1000)
 
-    pp, rr = [], []
-    for x in range(1, 30, 1):
-        pp.extend([np.sin(x) / 3 + x / 20 * 10, np.log(x) * 10, x / 10 * 10])
-        rr.append([x /10, 2 * x /10, x /10])
-    papthy = Path(pp, rr)
-    context.addObject(papthy)
+    path_script = Script(context, start_script=load_path)
+    path_script.startScript()
 
     scri = Script(context)
     scri.loadScripts(lambda x : None, srt)
