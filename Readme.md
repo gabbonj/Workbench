@@ -6,7 +6,7 @@ Workbench is lightweight graphics engine written in Python with PyOpenGL
     - Install dependences
     - The init file
     - Commands
-    - the GUI
+    - The GUI
 - Classes
     - Context
     - Camera
@@ -55,4 +55,15 @@ At the and end of the method the is a while loop everything that is written here
 You can also write your own startEngine() function and set it as the target of the *"engine_thread"* thread.
 
 ## Commands
-The commands to navigate space in the engine are very simple, the **W/A/S/D** keys move the camera **forward/left/backwards/right** relative to its position, the **shift/ctrl** keys mone the camera **up/down** in the $Y$ direction. The camera orientation is controlled by mouse, unless you press the **<** key that toggles the *first person* control mode and so you can move freely the mouse acrooss the screen.
+The commands to navigate space in the engine are very simple, the **W/A/S/D** keys move the camera **forward/left/backwards/right** relative to its position, the **shift/ctrl** keys mone the camera **up/down** in the Y direction. The camera orientation is controlled by mouse, unless you press the **<** key that toggles the *first person* control mode and so you can move freely the mouse acrooss the screen.
+
+## The GUI
+*The GUI is currently under development*
+
+
+# Classes
+
+## Context
+>```python 
+> Context(height, width, eyeposition=[1.0, 1.0, 1.0], objects=[], first_person=True)
+```
