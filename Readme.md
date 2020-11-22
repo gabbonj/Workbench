@@ -64,6 +64,26 @@ The commands to navigate space in the engine are very simple, the **W/A/S/D** ke
 # Classes
 
 ## Context
->```python 
-> Context(height, width, eyeposition=[1.0, 1.0, 1.0], objects=[], first_person=True)
+```python 
+ Context(height, width, eyeposition=[1.0, 1.0, 1.0], objects=[], first_person=True)
 ```
+
+### Parameters  
+- height : height of the window
+- width : width of the window
+- eyeposition : the initial position of the camera
+- objects : the list of the objects that will be rendered in the scene
+- first_person : determines te initial movement system
+
+
+## Camera
+```python 
+ Camera(display, position, forward, near=1.0, far=100.0)
+```
+
+### Parameter
+- display : a list containing the height and width of the screen
+- position : the initial position of the camera
+- forward : direction of the camera
+- near : near plane distance
+- far : far plane distance
