@@ -13,8 +13,8 @@ Workbench is lightweight graphics engine written in Python with PyOpenGL
     - Shader
     - Script
     - Object
-    - Empty *(not implemented yet LMAO)*
     - Path
+    - Empty *(not implemented yet LMAO)*
 - Examples
     - Load an Object
     - Load a path
@@ -87,3 +87,50 @@ The commands to navigate space in the engine are very simple, the **W/A/S/D** ke
 - forward : direction of the camera
 - near : near plane distance
 - far : far plane distance
+
+
+## Shader
+```python 
+ Shader(vertpath, fragpath)
+```
+
+### Parameter
+- vertpath : the path of the vertex shader
+- fragpath :  the path of the fragment shader
+
+
+## Script
+```python 
+ Script(ctx, obj=None,  start_script=None, update_script=None)
+```
+
+### Parameter
+- ctx : the context in which the script will run
+- obj : the object on which the script will run
+- start_script : the code that will run immediately after the script is loaded
+- update_script the code that will run every frame
+
+
+## Object
+```python 
+ Object(verteces, tris, vertex_path, frag_path, attribs, modeldata, scripts=[])
+```
+
+### Parameter
+- verteces : the OpenGL vertex array
+- tris : the triangles array
+- vertex_path : the path of the vertex shader
+- frag_path : the path of the fragment shader
+- attribs : an array of VertexAttribPointer data *( [ [size, stride, pointer_offset] ... ] )*
+- modeldata : an array containg the position and rotation of the object *( [x, y, z, rx, ry, rz] )*
+- scripts : the array of scripts that will run on the object
+
+
+## Path
+```python 
+ Path(position, rotation=None)
+```
+
+### Parameter
+- position : the set of position of the path *( [x1, y1, z1, ..., xn, yn, zn] )*
+- rotation : the set of rotation of the path *( [[Rx1, Ry1, Rz1], ..., [Rxn, Ryn, Rzn]] )*
