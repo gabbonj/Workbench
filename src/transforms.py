@@ -34,8 +34,19 @@ def get_traslation(x, y, z):
                     [ 0,  0,  0, 1]], dtype='float32')
     return out
 
+
+def get_scale(sx, sy, sz):
+    out = np.array([[ sx,  0,  0, 0],
+                    [ 0,  sy,  0, 0],
+                    [ 0,  0,  sz, 0],
+                    [ 0,  0,  0, 1]], dtype='float32')
+    return out
+
+
 def deg_to_rad(deg):
     return (deg * np.pi)/180
 
+
 def rad_to_deg(rad):
     return (rad * 180) / np.pi
+

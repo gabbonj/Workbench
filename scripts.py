@@ -21,7 +21,7 @@ def load_textured_obj(this):
                              'src\shaders\default\defaultvert.glsl',
                              'src\shaders\default\defaultfrag.glsl',
                              [ [ 3, 5 * 4, c_void_p(0) ], [2, 5 * 4, c_void_p(3 * 4)] ],
-                             [1, 1, 1, 0, 0, 0],
+                             [1, 1, 1, 0, 0, 0, 1, 1, 1],
                              texture = 'textures\\brick.jpg')
 
 ###########################################################
@@ -38,7 +38,7 @@ def load_rotating_obj(this):
                              'src\shaders\default\defaultvert.glsl',
                              'src\shaders\default\defaultfrag.glsl',
                              [ [ 3, 5 * 4, c_void_p(0) ], [2, 5 * 4, c_void_p(3 * 4)] ],
-                             [1, 1, 1, 0, 0, 0],
+                             [1, 1, 1, 0, 0, 0, 1, 1, 1],
                              texture = 'textures\\brick.jpg',
                              scripts=[rotate_script])
 

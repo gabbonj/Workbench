@@ -122,7 +122,7 @@ The commands to navigate space in the engine are very simple, the **W/A/S/D** ke
 - vertex_path : the path of the vertex shader
 - frag_path : the path of the fragment shader
 - attribs : an array of VertexAttribPointer data *( [ [size, stride, pointer_offset] ... ] )*
-- modeldata : an array containg the position and rotation of the object *( [x, y, z, rx, ry, rz] )*
+- modeldata : an array containg the position, rotation and scale of the object *( [x, y, z, rx, ry, rz, sx, sy, sz] )*
 - scripts : the array of scripts that will run on the object
 
 

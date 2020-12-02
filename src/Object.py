@@ -11,7 +11,7 @@ from OpenGL.GL import *
 class Object:
 
     # attribs syntax : [ [size, stride, pointer_offset] ... ]
-    # model data syntax: [x, y, z, rx, ry, rz]
+    # model data syntax: [x, y, z, rx, ry, rz, sx, sy, sz]
     def __init__(self, verteces, tris, vertex_path, frag_path, attribs, modeldata, scripts=[]):
         # stores the informations
         self.shader = Shader(vertex_path, frag_path).shaderProgram
@@ -73,14 +73,17 @@ class Object:
         rotMatrix = np.dot( get_rot(self.modeldata[3], 0), get_rot(self.modeldata[4], 1))
         rotMatrix = np.dot(rotMatrix, get_rot(self.modeldata[5], 2))
         model = np.dot(get_traslation(self.modeldata[0],self.modeldata[1], self.modeldata[2]), rotMatrix)
+        scale_matrix = get_scale(self.modeldata[6], self.modeldata[7], self.modeldata[8])
         view = camera.view
         proj = camera.proj
         modelLocation = glGetUniformLocation(self.shader, 'model')
         viewLocation = glGetUniformLocation(self.shader, 'view')
         projectionLocation = glGetUniformLocation(self.shader, 'projection')
+        scaleLocation = glGetUniformLocation(self.shader, 'scale')
         glUniformMatrix4fv(modelLocation, 1, GL_TRUE, model)
         glUniformMatrix4fv(viewLocation, 1, GL_TRUE, view)
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, proj)
+        glUniformMatrix4fv(scaleLocation, 1, GL_FALSE, scale_matrix)
 
         for x in range(len(self.attribs)):
             glEnableVertexAttribArray(x)
