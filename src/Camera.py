@@ -28,11 +28,11 @@ class Camera:
 
     
     def roateCamera(self, pitch, yaw):
-        self.pitch = pitch
+        self.pitch = np.clip(pitch, -np.pi/2, np.pi/2)
         self.yaw = yaw
-        self.forward[0] = np.cos(yaw) * np.cos(pitch)
-        self.forward[1] = np.sin(pitch)
-        self.forward[2] = np.sin(yaw) * np.cos(pitch)
+        self.forward[0] = np.cos(self.yaw) * np.cos(self.pitch)
+        self.forward[1] = np.sin(self.pitch)
+        self.forward[2] = np.sin(self.yaw) * np.cos(self.pitch)
         self.forward = normalize(self.forward)
         self.updateCamera(self.forward, self.position)
 
