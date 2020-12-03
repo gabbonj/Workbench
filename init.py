@@ -31,5 +31,6 @@ if __name__ == "__main__":
     engine_thread.start()
     time.sleep(1)
     
-    # remove this line to show the gui
+    # uncomment this line to show the gui
     #startGui()
+    engine_thread.join()
