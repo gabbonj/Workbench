@@ -12,7 +12,7 @@ class Object:
 
     # attribs syntax : [ [size, stride, pointer_offset] ... ]
     # model data syntax: [x, y, z, rx, ry, rz, sx, sy, sz]
-    def __init__(self, verteces, tris, vertex_path, frag_path, attribs, modeldata, scripts=[]):
+    def __init__(self, verteces, tris, vertex_path, frag_path, attribs, modeldata, scripts=[], mode=GL_TRIANGLES):
         # stores the informations
         self.shader = Shader(vertex_path, frag_path).shaderProgram
         self.vertices = verteces
@@ -20,6 +20,7 @@ class Object:
         self.modeldata = modeldata
         self.attribs = attribs
         self.scripts = scripts
+        self.mode = mode
 
         # loads on gpu
         self.vertexArray = glGenVertexArrays(1)
@@ -87,7 +88,7 @@ class Object:
 
         for x in range(len(self.attribs)):
             glEnableVertexAttribArray(x)
-        glDrawElements(GL_TRIANGLES, len(self.tris), GL_UNSIGNED_INT, None)
+        glDrawElements(self.mode, len(self.tris), GL_UNSIGNED_INT, None)
         for x in range(len(self.attribs)):
             glDisableVertexAttribArray(x)
 

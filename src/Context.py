@@ -149,11 +149,12 @@ class Context:
             if isinstance(obj, Object):
                 obj.scriptUpdate()
 
-    def update(self):
+    def update(self, external_clear=False):
         t = time.time()
         
         # Opengl update
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+        if not external_clear:
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
         if self.grid['render']:
             self.renderGrid()
         self.renderObjects()
